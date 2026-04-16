@@ -100,7 +100,7 @@ function gameObject() {
                     blocks: 1,
                     slamDunks: 0,
                 },
-                "Brendan Hayword": {
+                "Brendan Haywood": {
                     number: 33,
                     shoe: 15,
                     points: 6,
@@ -114,3 +114,83 @@ function gameObject() {
         },
     };
 }
+
+// Helper function to find a player by name
+function findPlayer(playerName) {
+    const game = gameObject();
+    const teams = [game.home, game.away];
+    for (let team of teams) {
+        if (team.players[playerName]) {
+            return team.players[playerName];
+        }
+    }
+    return null;
+}
+
+// 1. Returns the points scored by the given player
+function numPointsScored(playerName) {
+    const player = findPlayer(playerName);
+    return player ? player.points : null;
+}
+
+// 2. Returns the shoe size of the given player
+function shoeSize(playerName) {
+    const player = findPlayer(playerName);
+    return player ? player.shoe : null;
+}
+
+// 3. Returns an array of the team's colors
+function teamColors(teamName) {
+    const game = gameObject();
+    const teams = [game.home, game.away];
+    const team = teams.find(t => t.teamName === teamName);
+    return team ? team.colors : [];
+}
+
+// 4. Returns an array of both team names
+function teamNames() {
+    const game = gameObject();
+    return [game.home.teamName, game.away.teamName];
+}
+
+// 5. Returns an array of jersey numbers for the given team
+function playerNumbers(teamName) {
+    const game = gameObject();
+    const teams = [game.home, game.away];
+    const team = teams.find(t => t.teamName === teamName);
+    if (!team) return [];
+    return Object.values(team.players).map(p => p.number);
+}
+
+// 6. Returns an object containing all stats for the given player
+function playerStats(playerName) {
+    return findPlayer(playerName) || {};
+}
+
+// 7. Finds the player with the largest shoe size and returns their number of rebounds
+function bigShoeRebounds() {
+    const game = gameObject();
+    const teams = [game.home, game.away];
+    let maxShoe = 0;
+    let rebounds = 0;
+    for (let team of teams) {
+        for (let playerName in team.players) {
+            const player = team.players[playerName];
+            if (player.shoe > maxShoe) {
+                maxShoe = player.shoe;
+                rebounds = player.rebounds;
+            }
+        }
+    }
+    return rebounds;
+}
+
+module.exports = {
+    numPointsScored,
+    shoeSize,
+    teamColors,
+    teamNames,
+    playerNumbers,
+    playerStats,
+    bigShoeRebounds
+};
